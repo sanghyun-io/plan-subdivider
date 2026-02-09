@@ -158,17 +158,18 @@ Claude가:
 
 ## 검증
 
-\`\`\`bash
+```bash
 ./gradlew build
 ./gradlew test
-\`\`\`
+```
 
 ---
 
 ## 다음 작업
 
 **[Task 2: User 리포지토리](./02-user-repository.md)**
-```
+
+
 
 ---
 

@@ -16,3 +16,7 @@ test/
 # Temporary files
 *.tmp
 *.bak
+
+# Local development instructions
+CLAUDE.md
+.claude/

@@ -1,339 +1,414 @@
-# Plan Subdivider - Claude Code Plugin
+# Plan Subdivider
 
-**Structured planning system with automatic task subdivision for Claude Code**
+> **Transform complex plans into structured, actionable tasks** — automatically
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/sanghyun-io/plan-subdivider)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/sanghyun-io/plan-subdivider?style=social)](https://github.com/sanghyun-io/plan-subdivider/stargazers)
 
-## 📋 Overview
+**English** | [한국어](README.ko.md)
 
-This plugin provides a comprehensive planning workflow for Claude Code, enabling automatic subdivision of complex plans into structured, actionable tasks with built-in verification and navigation.
+**Plan Subdivider** is a Claude Code plugin that automatically breaks down large plans into manageable, sequential tasks with built-in checklists, verification steps, and navigation.
 
-### ✨ Features
+---
 
-- ✅ **Automatic Plan Subdivision**: Split complex plans into manageable task files
-- ✅ **Checklist Generation**: Auto-generate actionable checklists for each task
-- ✅ **Task Navigation**: Previous/next task links for sequential execution
-- ✅ **Verification Automation**: Built-in verification commands per task
-- ✅ **Pre-work Workflow**: Automatic subdivision suggestions before plan execution
-- ✅ **Rule-based Structure**: Consistent plan formatting with validation
+## 🎯 Why Plan Subdivider?
 
-## 🚀 Installation
-
-### Via Claude Code Marketplace
-
-```bash
-# Add marketplace (if not already added)
-/plugin marketplace add your-marketplace-url
-
-# Install plugin
-/plugin install plan-subdivider
+**Before** 😰:
+```
+Plan: Implement user authentication
+- Setup User entity
+- Create repository
+- Implement service layer
+- Add REST API
+- Write tests
 ```
 
-### Manual Installation
-
-```bash
-# Clone repository
-git clone https://github.com/sanghyun-io/plan-subdivider.git
-
-# Install to Claude Code
-cp -r plan-subdivider ~/.claude/plugins/plan-structure
-
-# Or install to project
-cp -r plan-subdivider .claude/plugins/plan-structure
+**After** ✨:
+```
+~/.claude/plans/user-authentication/
+├── 01-user-entity.md          ✓ Clear goal
+├── 02-user-repository.md      ✓ Step-by-step checklist
+├── 03-auth-service.md         ✓ Verification commands
+├── 04-auth-controller.md      ✓ Next task navigation
+└── 05-integration-tests.md    ✓ Completion criteria
 ```
 
-### Post-Installation
+Each task file includes:
+- **Clear objectives** — Know exactly what to build
+- **Actionable checklists** — Step-by-step implementation guide
+- **Verification commands** — Validate each step
+- **Task navigation** — Seamless flow between tasks
 
-The plugin automatically installs rule files to `.claude/rules/` on first session start.
+---
 
-**Verify installation:**
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| **🤖 Automatic Subdivision** | Claude analyzes your plan and proposes optimal task breakdown |
+| **📋 Smart Checklists** | Each task gets detailed, actionable checklist items |
+| **🔗 Task Navigation** | Previous/next links for sequential execution |
+| **✅ Built-in Verification** | Auto-generated verification commands per task |
+| **🚦 Pre-work Workflow** | Claude suggests subdivision before starting implementation |
+| **📐 Rule-based Structure** | Consistent formatting across all plans |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Install
+
 ```bash
-ls .claude/rules/
-# Should show: plan-structure.md, rule-format.md
+/plugin install https://github.com/sanghyun-io/plan-subdivider
 ```
 
-## 📖 Quick Start
+That's it! The plugin auto-installs rules to `.claude/rules/` on first run.
 
-### 1. Create a Plan
+### 2. Create a Plan
 
 ```bash
-/plan Implement user authentication system
+/plan Implement user authentication with JWT
 ```
 
-Claude (Prometheus agent) will interview you about requirements and create a structured plan.
+Claude (via Prometheus agent) interviews you and creates a structured plan.
 
-### 2. Subdivide the Plan
-
-When you're ready to start implementation:
+### 3. Subdivide
 
 ```bash
 /subdivide
 ```
 
-Claude will:
-- Analyze the plan structure
-- Propose task breakdown
-- Ask for confirmation via `AskUserQuestion`
-- Generate detailed task files with checklists
+Claude:
+1. Analyzes your plan structure
+2. Proposes task breakdown
+3. Asks for confirmation
+4. Generates task files with checklists
 
-### 3. Execute Tasks
+### 4. Execute
 
-Navigate to the first task and start implementation:
+Open the first task and start coding:
 
-```markdown
+```bash
 ~/.claude/plans/your-plan/01-first-task.md
 ```
 
-Each task includes:
-- Goal and context
-- Detailed checklist
-- Completion criteria
-- Verification commands
-- Link to next task
+Follow the checklist, run verification commands, and click "Next Task" when done!
 
-## 📁 File Structure
+---
 
-### Generated Plan Structure
-
-```
-~/.claude/plans/
-├── your-plan.md                # Main plan with task index
-└── your-plan/                  # Task folder
-    ├── 01-first-task.md        # Task 1 with checklist
-    ├── 02-second-task.md       # Task 2 with checklist
-    └── ...
-```
+## 📸 Example Output
 
 ### Main Plan File
 
 ```markdown
-# {Plan Title}
-
-> **Created**: YYYY-MM-DD
-> **Purpose**: {One-line description}
-
----
+# User Authentication Implementation
 
 ## Implementation Tasks
 
-| # | Task | File | Description |
-|:-:|------|------|-------------|
-| 1 | **Task 1** | [01-task.md](./plan/01-task.md) | ... |
-| 2 | **Task 2** | [02-task.md](./plan/02-task.md) | ... |
-
-### Task Rules
-
-1. **Sequential execution**: Start from Task 01
-2. **Checklist completion**: Check all items before moving to next
-3. **Verification**: Run verification commands per task
-4. **Navigation**: Use "Next Task" links to proceed
+| # | Task | File | Status |
+|:-:|------|------|:------:|
+| 1 | **User Entity** | [01-user-entity.md](./auth/01-user-entity.md) | ✓ |
+| 2 | **User Repository** | [02-user-repository.md](./auth/02-user-repository.md) | 🔄 |
+| 3 | **Auth Service** | [03-auth-service.md](./auth/03-auth-service.md) | ⏳ |
+| 4 | **Auth Controller** | [04-auth-controller.md](./auth/04-auth-controller.md) | ⏳ |
+| 5 | **Integration Tests** | [05-tests.md](./auth/05-tests.md) | ⏳ |
 ```
 
-### Task File Template
+### Task File (01-user-entity.md)
 
 ```markdown
-# Task {N}: {Task Name}
+# Task 1: User Entity
 
-> **Order**: {current}/{total}
-> **Previous**: [{prev-task}](./{prev-file}) or (None - first task)
-> **Next**: [{next-task}](./{next-file}) or (None - last task)
+> **Order**: 1/5
+> **Previous**: (None - first task)
+> **Next**: [Task 2: User Repository](./02-user-repository.md)
 
 ---
 
 ## Goal
 
-{Task objective from original plan}
+Create User entity with JPA annotations for database persistence.
 
 ---
 
 ## Checklist
 
-### 1. {Step 1}
-- [ ] {Subtask 1}
-- [ ] {Subtask 2}
+### 1. Create Entity Class
+- [ ] Create `User.kt` in `domain/` package
+- [ ] Add `@Entity` annotation
+- [ ] Define fields: id, email, password, roles, createdAt
+  ```kotlin
+  @Entity
+  data class User(
+      @Id @GeneratedValue
+      val id: Long? = null,
+      val email: String,
+      val password: String,
+      // ...
+  )
+  ```
+- [ ] Add validation annotations
 
-### 2. {Step 2}
-- [ ] {Subtask 3}
-
----
-
-## Completion Criteria
-
-1. All checklist items completed
-2. Build successful
-3. Tests passing
+### 2. Database Schema
+- [ ] Create migration script `V001__create_users_table.sql`
+- [ ] Test migration with `./gradlew flywayMigrate`
 
 ---
 
 ## Verification
 
 \`\`\`bash
-{Project-specific verification commands}
+./gradlew build
+./gradlew test
 \`\`\`
 
 ---
 
 ## Next Task
 
-**[Task {N+1}: {Next Task Name}](./{next-file})**
+**[Task 2: User Repository](./02-user-repository.md)**
 ```
 
-## 🎯 Subdivision Criteria
+---
 
-### When to Subdivide
+## 🎨 How It Works
 
-| Criteria | Description |
-|----------|-------------|
-| Independent deliverables | Each task can be completed independently |
-| Logical steps | Sequential stages of implementation |
-| Different areas | Separate code/file domains |
-| Verifiable | Each task completion can be verified |
+```
+┌─────────────────────────────────────────────────────────────┐
+│  You: "/plan Implement feature X"                          │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│  Claude (Prometheus): Creates structured plan              │
+│  - Requirements gathering                                   │
+│  - Architecture design                                      │
+│  - Implementation steps                                     │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│  You: "Start implementation"                                │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│  Claude: "This plan has 5 tasks. Run /subdivide?"          │
+│  You: "Yes" ✓                                               │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│  Plan Subdivider: Generates task files                     │
+│  01-task.md → 02-task.md → 03-task.md → ...                │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│  You: Execute tasks sequentially with clear guidance       │
+└─────────────────────────────────────────────────────────────┘
+```
 
-### Example Breakdown
+---
 
-| Task Type | Subdivision |
-|-----------|-------------|
-| Entity addition | Domain → Repository → Service → Controller |
-| API development | Per endpoint or per feature |
-| Refactoring | Per module or per layer |
-| Migration | Prepare → Execute → Verify → Cleanup |
+## 📦 What's Included
 
-## 🔧 Advanced Usage
+### Plugin Components
+
+```
+plan-subdivider/
+├── .claude-plugin/
+│   ├── plugin.json              # Plugin metadata
+│   └── marketplace.json         # Marketplace config
+├── rules/
+│   ├── plan-structure.md        # Plan structure rules
+│   └── rule-format.md           # Rule format standards
+├── skills/
+│   └── plan-subdivide/
+│       └── SKILL.md             # /subdivide command
+├── scripts/
+│   └── install-rules.sh         # Auto-install script
+├── hooks/
+│   └── hooks.json               # Post-install automation
+└── examples/
+    └── sample-plan.md           # Example plan
+```
+
+### Automatically Installed Rules
+
+When you install the plugin, these rules are copied to your `.claude/rules/`:
+
+- **`plan-structure.md`**: Defines plan file structure, task templates, and subdivision criteria
+- **`rule-format.md`**: Ensures consistent rule file formatting
+
+---
+
+## 🔧 Configuration
+
+### Installation Modes
+
+Choose where rules are installed:
+
+```bash
+# Global (default) - Available across all projects
+/plugin install https://github.com/sanghyun-io/plan-subdivider
+
+# Project - Shared with team via git
+CLAUDE_PLUGIN_INSTALL_MODE=project /plugin install ...
+
+# Local - Project-specific, gitignored
+CLAUDE_PLUGIN_INSTALL_MODE=local /plugin install ...
+```
+
+### Subdivision Criteria
+
+Plans are automatically subdivided when they have:
+- ≥ 3 tasks
+- Multiple file modifications
+- Complex implementation steps
+
+Customize criteria in `.claude/rules/plan-structure.md`
+
+---
+
+## 🤝 Integration
+
+### Works With
+
+- **Prometheus**: Creates structured plans via `/plan`
+- **Momus**: Reviews plans with `/review`
+- **Sisyphus**: Multi-agent task orchestration
+- **Claude Plan Mode**: Native plan creation workflow
 
 ### Pre-work Workflow
 
 When executing a plan, Claude automatically:
 
-1. **Checks task count**: If ≥ 3 tasks, suggests `/subdivide`
-2. **Checks complexity**: If multi-file changes, suggests `/review`
-3. **Asks for confirmation**: Via `AskUserQuestion` tool
+1. **Checks task count**: If ≥ 3 tasks → suggests `/subdivide`
+2. **Checks complexity**: If multi-file changes → suggests `/review`
+3. **Asks confirmation**: Via `AskUserQuestion` tool
 
-**Example**:
-```json
-{
-  "question": "Run Pre-work before implementation?",
-  "options": [
-    "Skip and start immediately",
-    "Run /subdivide",
-    "Run /review"
-  ]
-}
-```
+---
 
-### Manual Subdivision
+## 📚 Examples
 
+### Example 1: REST API Development
+
+**Input**:
 ```bash
-# Subdivide latest plan
-/subdivide
-
-# Subdivide specific plan
-/subdivide ~/.claude/plans/my-plan.md
+/plan Create REST API for blog posts with CRUD operations
 ```
 
-### Customizing Installation
+**Output**:
+```
+blog-api/
+├── 01-post-entity.md
+├── 02-post-repository.md
+├── 03-post-service.md
+├── 04-post-controller.md
+├── 05-exception-handling.md
+└── 06-integration-tests.md
+```
 
-Control where rules are installed:
+### Example 2: Database Migration
 
+**Input**:
 ```bash
-# Install to global ~/.claude/rules (default for project plugins)
-CLAUDE_PLUGIN_INSTALL_MODE=global /plugin install plan-subdivider
-
-# Install to project .claude/rules (default)
-CLAUDE_PLUGIN_INSTALL_MODE=project /plugin install plan-subdivider
+/plan Migrate user data from MongoDB to PostgreSQL
 ```
 
-## 📚 Rule Files
-
-This plugin installs the following rule files:
-
-### `plan-structure.md`
-- Main plan file structure
-- Task file template
-- Subdivision criteria
-- Pre-work workflow
-- Linked skills integration
-
-### `rule-format.md`
-- Rule file format standard
-- Frontmatter structure
-- Required sections
-- Linked skills table format
-- Validation checklist
-
-## 🤝 Integration with Other Systems
-
-### Sisyphus Multi-Agent System
-
-This plugin integrates seamlessly with the Sisyphus orchestration system:
-
-```markdown
-# In your CLAUDE.md
-
-## Plan Structure (see @.claude/rules/plan-structure.md)
-
-Plans are automatically structured with subdivision support.
-
-### Pre-work
-- Task ≥ 3: `/subdivide` suggested
-- Multi-file: `/review` suggested
+**Output**:
+```
+mongodb-to-postgres/
+├── 01-schema-design.md
+├── 02-migration-script.md
+├── 03-data-validation.md
+├── 04-cutover-plan.md
+└── 05-rollback-procedure.md
 ```
 
-### Compatible Agents
+---
 
-- **Prometheus**: Strategic planning agent (creates plans)
-- **Momus**: Critical plan review agent
-- **Orchestrator-Sisyphus**: Multi-step task coordination
-
-## 🛠️ Troubleshooting
+## 🐛 Troubleshooting
 
 ### Rules not installed
 
 ```bash
 # Manually run installation script
-bash ~/.claude/plugins/plan-structure/scripts/install-rules.sh
+bash ~/.claude/plugins/plan-subdivider/scripts/install-rules.sh
 ```
 
-### Skill not recognized
+### `/subdivide` not recognized
 
-```bash
-# Verify skill installation
-ls ~/.claude/plugins/plan-structure/skills/plan-subdivide/
+1. Verify plugin is enabled:
+   ```bash
+   /plugin list
+   ```
 
-# Should show: SKILL.md
-```
+2. Check skill installation:
+   ```bash
+   ls ~/.claude/plugins/plan-subdivider/skills/plan-subdivide/
+   # Should show: SKILL.md
+   ```
+
+3. Restart Claude Code
 
 ### Subdivision not working
 
-1. Check you're not in Plan mode: Exit with `/exit` or complete planning
+1. Exit Plan mode first: Type `/exit` or complete planning
 2. Verify plan file exists: `ls ~/.claude/plans/*.md`
 3. Check rule files: `ls .claude/rules/plan-structure.md`
+
+---
+
+## 🌟 Why Star This Project?
+
+If Plan Subdivider helps you:
+
+- ⭐ **Star** to show support and help others discover it
+- 🐛 **Report issues** to improve the plugin
+- 💡 **Suggest features** to make it even better
+- 🤝 **Contribute** via pull requests
+
+Your star helps Plan Subdivider get discovered on [ClaudeMarketplaces.com](https://claudemarketplaces.com/)!
+
+---
 
 ## 📝 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
+---
+
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
+Contributions welcome! Please:
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
 4. Submit a pull request
 
+---
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
 
+---
+
 ## 🙏 Acknowledgments
 
-- Claude Code team for the extensibility framework
-- Sisyphus system developers
-- Claude Code community
+- Built for the Claude Code community
+- Inspired by GTD (Getting Things Done) methodology
+- Powered by Claude Sonnet 4.5
 
 ---
 
-**Questions or issues?** Open an issue on [GitHub](https://github.com/sanghyun-io/plan-subdivider/issues)
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/sanghyun-io/plan-subdivider/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sanghyun-io/plan-subdivider/discussions)
+- **Email**: ppkimsanh@gmail.com
+
+---
 
 **Made with ❤️ for Claude Code**
+
+⭐ **Star this repo** to help others discover Plan Subdivider!

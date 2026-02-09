@@ -60,7 +60,11 @@
 ### 1. 설치
 
 ```bash
-/plugin install https://github.com/sanghyun-io/plan-subdivider
+# 마켓플레이스 추가
+/plugin marketplace add sanghyun-io/plan-subdivider
+
+# 플러그인 설치
+/plugin install plan-subdivider@sanghyun-io-plan-subdivider
 ```
 
 끝! 플러그인이 첫 실행 시 자동으로 규칙을 `.claude/rules/`에 설치합니다.

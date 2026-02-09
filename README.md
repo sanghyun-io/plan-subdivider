@@ -60,7 +60,11 @@ Each task file includes:
 ### 1. Install
 
 ```bash
-/plugin install https://github.com/sanghyun-io/plan-subdivider
+# Add the marketplace
+/plugin marketplace add sanghyun-io/plan-subdivider
+
+# Install the plugin
+/plugin install plan-subdivider@sanghyun-io-plan-subdivider
 ```
 
 That's it! The plugin auto-installs rules to `.claude/rules/` on first run.

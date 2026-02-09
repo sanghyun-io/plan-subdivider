@@ -115,14 +115,14 @@ Claude가:
 | 5 | **통합 테스트** | [05-tests.md](./auth/05-tests.md) | ⏳ |
 ```
 
-### 작업 파일 (01-user-entity.md)
+### 예시: 작업 파일 (01-user-entity.md)
 
 ```markdown
 # Task 1: User 엔티티
 
 > **순서**: 1/5
 > **이전 작업**: (없음 - 첫 작업)
-> **다음 작업**: [Task 2: User 리포지토리](./02-user-repository.md)
+> **다음 작업**: Task 2: User 리포지토리 (./02-user-repository.md)
 
 ---
 
@@ -167,7 +167,7 @@ Claude가:
 
 ## 다음 작업
 
-**[Task 2: User 리포지토리](./02-user-repository.md)**
+**Task 2: User 리포지토리** (./02-user-repository.md)
 
 
 

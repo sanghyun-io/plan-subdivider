@@ -115,14 +115,14 @@ Follow the checklist, run verification commands, and click "Next Task" when done
 | 5 | **Integration Tests** | [05-tests.md](./auth/05-tests.md) | ⏳ |
 ```
 
-### Task File (01-user-entity.md)
+### Example: Task File (01-user-entity.md)
 
 ```markdown
 # Task 1: User Entity
 
 > **Order**: 1/5
 > **Previous**: (None - first task)
-> **Next**: [Task 2: User Repository](./02-user-repository.md)
+> **Next**: Task 2: User Repository (./02-user-repository.md)
 
 ---
 
@@ -167,7 +167,7 @@ Create User entity with JPA annotations for database persistence.
 
 ## Next Task
 
-**[Task 2: User Repository](./02-user-repository.md)**
+**Task 2: User Repository** (./02-user-repository.md)
 
 
 ---

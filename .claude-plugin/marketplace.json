@@ -7,27 +7,18 @@
   "plugins": [
     {
       "name": "plan-subdivider",
-      "source": "github",
-      "repo": "sanghyun-io/plan-subdivider",
-      "description": "Plan Subdivider - Automatic task subdivision and structured planning for Claude Code",
+      "source": "./plugins/plan-subdivider",
+      "description": "Automatically breaks down large plans into manageable, sequential tasks with built-in checklists, verification steps, and navigation",
       "version": "1.0.0",
-      "keywords": [
-        "planning",
-        "workflow",
-        "task-management",
-        "subdivision",
-        "rules",
-        "prometheus",
-        "sisyphus",
-        "subdivider"
-      ],
-      "categories": [
-        "productivity",
-        "workflow",
-        "planning"
-      ],
-      "readme": "README.md",
-      "changelog": "CHANGELOG.md"
+      "author": {
+        "name": "sanghyun-io",
+        "email": "ppkimsanh@gmail.com"
+      },
+      "homepage": "https://github.com/sanghyun-io/plan-subdivider",
+      "repository": "https://github.com/sanghyun-io/plan-subdivider",
+      "license": "MIT",
+      "keywords": ["planning", "workflow", "task-management", "subdivision", "gtd", "productivity"],
+      "category": "productivity"
     }
   ]
 }

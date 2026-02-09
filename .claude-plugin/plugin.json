@@ -8,9 +8,6 @@
   },
   "homepage": "https://github.com/sanghyun-io/plan-subdivider",
   "repository": "https://github.com/sanghyun-io/plan-subdivider",
-  "keywords": ["planning", "workflow", "task-management", "subdivision", "rules", "subdivider"],
-  "components": {
-    "skills": ["plan-subdivide"],
-    "rules": ["plan-structure", "rule-format"]
-  }
+  "license": "MIT",
+  "keywords": ["planning", "workflow", "task-management", "subdivision", "rules", "subdivider", "gtd", "productivity"]
 }

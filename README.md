@@ -158,17 +158,17 @@ Create User entity with JPA annotations for database persistence.
 
 ## Verification
 
-\`\`\`bash
+```bash
 ./gradlew build
 ./gradlew test
-\`\`\`
+```
 
 ---
 
 ## Next Task
 
 **[Task 2: User Repository](./02-user-repository.md)**
-```
+
 
 ---
 

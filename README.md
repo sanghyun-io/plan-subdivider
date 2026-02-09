@@ -59,11 +59,24 @@ Each task file includes:
 
 ### 1. Install
 
-```bash
-# Add the marketplace
-/plugin marketplace add sanghyun-io/plan-subdivider
+**Step 1: Add the marketplace**
 
-# Install the plugin
+Open Claude Code and run:
+```bash
+/plugin
+```
+
+Then:
+1. Go to the **Marketplaces** tab
+2. Click **"Add Marketplace"**
+3. Enter the Git URL:
+   ```
+   https://github.com/sanghyun-io/plan-subdivider.git
+   ```
+
+**Step 2: Install the plugin**
+
+```bash
 /plugin install plan-subdivider@sanghyun-io-plan-subdivider
 ```
 

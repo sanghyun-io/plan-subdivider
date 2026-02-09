@@ -59,11 +59,24 @@
 
 ### 1. 설치
 
-```bash
-# 마켓플레이스 추가
-/plugin marketplace add sanghyun-io/plan-subdivider
+**1단계: 마켓플레이스 추가**
 
-# 플러그인 설치
+Claude Code를 열고 다음 명령어 실행:
+```bash
+/plugin
+```
+
+그 다음:
+1. **Marketplaces** 탭으로 이동
+2. **"Add Marketplace"** 버튼 클릭
+3. Git URL 입력:
+   ```
+   https://github.com/sanghyun-io/plan-subdivider.git
+   ```
+
+**2단계: 플러그인 설치**
+
+```bash
 /plugin install plan-subdivider@sanghyun-io-plan-subdivider
 ```
 

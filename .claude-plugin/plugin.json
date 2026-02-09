@@ -1,0 +1,16 @@
+{
+  "name": "plan-subdivider",
+  "description": "Structured planning system with automatic task subdivision for Claude Code",
+  "version": "1.0.0",
+  "author": {
+    "name": "sanghyun-io",
+    "email": "ppkimsanh@gmail.com"
+  },
+  "homepage": "https://github.com/sanghyun-io/plan-subdivider",
+  "repository": "https://github.com/sanghyun-io/plan-subdivider",
+  "keywords": ["planning", "workflow", "task-management", "subdivision", "rules", "subdivider"],
+  "components": {
+    "skills": ["plan-subdivide"],
+    "rules": ["plan-structure", "rule-format"]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PostPluginInstall": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-rules.sh",
+            "description": "Install plan structure rule files to .claude/rules/"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "log",
+            "message": "Plan Structure Plugin active. Use /subdivide to organize complex plans."
+          }
+        ]
+      }
+    ]
+  }
+}

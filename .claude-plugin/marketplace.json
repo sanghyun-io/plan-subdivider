@@ -1,0 +1,33 @@
+{
+  "name": "plan-subdivider-marketplace",
+  "owner": {
+    "name": "sanghyun-io",
+    "email": "ppkimsanh@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "plan-subdivider",
+      "source": "github",
+      "repo": "sanghyun-io/plan-subdivider",
+      "description": "Plan Subdivider - Automatic task subdivision and structured planning for Claude Code",
+      "version": "1.0.0",
+      "keywords": [
+        "planning",
+        "workflow",
+        "task-management",
+        "subdivision",
+        "rules",
+        "prometheus",
+        "sisyphus",
+        "subdivider"
+      ],
+      "categories": [
+        "productivity",
+        "workflow",
+        "planning"
+      ],
+      "readme": "README.md",
+      "changelog": "CHANGELOG.md"
+    }
+  ]
+}

@@ -278,6 +278,34 @@ Plans are automatically subdivided when they have:
 
 Customize criteria in `.claude/rules/plan-structure.md`
 
+### Recommended Permissions
+
+To use Plan Subdivider smoothly, add these permissions to your `~/.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Write(~/.claude/plans/**)",
+      "Edit(~/.claude/plans/**)",
+      "Write(**/.claude/plans/**)",
+      "Edit(**/.claude/plans/**)"
+    ]
+  }
+}
+```
+
+**Why these permissions?**
+- `Write(~/.claude/plans/**)`: Allows creating subdivided task files
+- `Edit(~/.claude/plans/**)`: Allows updating plan status and checklists
+- `**/.claude/plans/**`: Project-level plan directories
+
+**Windows users**: Also add Windows-style paths:
+```json
+"Write(C:/Users/YOUR_USERNAME/.claude/plans/**)",
+"Edit(C:/Users/YOUR_USERNAME/.claude/plans/**)"
+```
+
 ---
 
 ## 🤝 Integration

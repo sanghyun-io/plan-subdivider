@@ -279,6 +279,34 @@ plan-subdivider/
 
 `.claude/rules/plan-structure.md`에서 기준 커스터마이징 가능
 
+### 권장 권한 설정
+
+Plan Subdivider를 원활히 사용하려면 `~/.claude/settings.json`에 다음 권한을 추가하세요:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Write(~/.claude/plans/**)",
+      "Edit(~/.claude/plans/**)",
+      "Write(**/.claude/plans/**)",
+      "Edit(**/.claude/plans/**)"
+    ]
+  }
+}
+```
+
+**왜 이 권한이 필요한가요?**
+- `Write(~/.claude/plans/**)`: 세분화된 작업 파일 생성 허용
+- `Edit(~/.claude/plans/**)`: 계획 상태 및 체크리스트 업데이트 허용
+- `**/.claude/plans/**`: 프로젝트 레벨 계획 디렉토리
+
+**Windows 사용자**: Windows 스타일 경로도 추가하세요:
+```json
+"Write(C:/Users/사용자이름/.claude/plans/**)",
+"Edit(C:/Users/사용자이름/.claude/plans/**)"
+```
+
 ---
 
 ## 🤝 통합

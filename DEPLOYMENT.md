@@ -109,12 +109,17 @@ Before deploying, update these files with your actual GitHub information:
 #### `.claude-plugin/marketplace.json`
 ```json
 {
+  "name": "plan-subdivider",
   "owner": {
     "name": "sanghyun-io",
     "email": "ppkimsanh@gmail.com"
   },
   "plugins": [{
-    "repo": "sanghyun-io/plan-subdivider"
+    "name": "plan-subdivider",
+    "source": "./",
+    "description": "Automatically breaks down large plans into manageable, sequential tasks",
+    "category": "productivity",
+    "tags": ["planning", "workflow", "task-management", "subdivision"]
   }]
 }
 ```
@@ -126,72 +131,43 @@ Replace all instances of:
 
 ### 4. Test Installation Locally
 
-Before publishing, test the plugin locally:
+Before publishing, test the plugin via marketplace:
 
 ```bash
-# Copy to Claude plugins directory
-cp -r plan-subdivider ~/.claude/plugins/plan-structure
+# In Claude Code session:
 
-# Start Claude Code and verify
-claude-code
+# 1. Add marketplace
+/plugin marketplace add sanghyun-io/plan-subdivider
 
-# In Claude session, check:
+# 2. Install plugin
+/plugin install plan-subdivider@plan-subdivider
+
+# 3. Verify installation
 /plugin list
-# Should show "plan-structure"
+# Should show "plan-subdivider"
 
-# Test subdivision
+# 4. Test subdivision
 /subdivide
 ```
 
-### 5. Publish to Marketplace
+### 5. Install from Marketplace
 
-#### Option A: Official Claude Code Marketplace (if available)
-
-Follow Claude Code's official marketplace submission process.
-
-#### Option B: Self-Hosted Marketplace
+Users install with two commands:
 
 ```bash
-# Create marketplace repository
-gh repo create claude-plugins-marketplace --public
+# 1. Add marketplace (one-time)
+/plugin marketplace add sanghyun-io/plan-subdivider
 
-# Create marketplace index
-cat > marketplace.json << 'EOF'
-{
-  "name": "sanghyun-io Plugins",
-  "owner": {
-    "name": "sanghyun-io",
-    "email": "ppkimsanh@gmail.com"
-  },
-  "plugins": [
-    {
-      "name": "plan-structure",
-      "source": "github",
-      "repo": "sanghyun-io/plan-subdivider",
-      "description": "Structured planning system with automatic task subdivision",
-      "version": "1.0.0",
-      "keywords": ["planning", "workflow", "subdivision"]
-    }
-  ]
-}
-EOF
-
-# Push to GitHub
-git init
-git add marketplace.json
-git commit -m "Add Plan Subdivider Plugin to marketplace"
-git remote add origin https://github.com/sanghyun-io/claude-plugins-marketplace.git
-git push -u origin main
+# 2. Install the plugin
+/plugin install plan-subdivider@plan-subdivider
 ```
 
-#### Option C: Direct Installation URL
+Or via the UI:
 
-Users can install directly from GitHub:
-
-```bash
-# Users run:
-/plugin install https://github.com/sanghyun-io/plan-subdivider
-```
+1. Run `/plugin`
+2. Go to **Marketplaces** tab → **Add Marketplace**
+3. Enter: `https://github.com/sanghyun-io/plan-subdivider.git`
+4. Then install `plan-subdivider` from the plugin list
 
 ## 🧪 Testing Checklist
 
@@ -229,7 +205,7 @@ After deployment, share your plugin:
 ✅ Sequential navigation
 ✅ Built-in verification
 
-Install: /plugin install https://github.com/sanghyun-io/plan-subdivider
+Install: /plugin marketplace add sanghyun-io/plan-subdivider && /plugin install plan-subdivider@plan-subdivider
 
 #ClaudeCode #ProductivityTools
 ```

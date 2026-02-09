@@ -59,26 +59,22 @@ Each task file includes:
 
 ### 1. Install
 
-**Step 1: Add the marketplace**
-
-Open Claude Code and run:
-```bash
-/plugin
-```
-
-Then:
-1. Go to the **Marketplaces** tab
-2. Click **"Add Marketplace"**
-3. Enter the Git URL:
-   ```
-   https://github.com/sanghyun-io/plan-subdivider.git
-   ```
-
-**Step 2: Install the plugin**
+**Option A: CLI (recommended)**
 
 ```bash
-/plugin install plan-subdivider@sanghyun-io-plan-subdivider
+# Add marketplace
+/plugin marketplace add sanghyun-io/plan-subdivider
+
+# Install plugin
+/plugin install plan-subdivider@plan-subdivider
 ```
+
+**Option B: UI**
+
+1. Run `/plugin`
+2. Go to the **Marketplaces** tab → **"Add Marketplace"**
+3. Enter: `https://github.com/sanghyun-io/plan-subdivider.git`
+4. Install `plan-subdivider` from the plugin list
 
 That's it! The plugin auto-installs rules to `.claude/rules/` on first run.
 
@@ -264,13 +260,13 @@ Choose where rules are installed:
 
 ```bash
 # Global (default) - Available across all projects
-/plugin install https://github.com/sanghyun-io/plan-subdivider
+/plugin install plan-subdivider@plan-subdivider
 
 # Project - Shared with team via git
-CLAUDE_PLUGIN_INSTALL_MODE=project /plugin install ...
+/plugin install plan-subdivider@plan-subdivider --scope project
 
 # Local - Project-specific, gitignored
-CLAUDE_PLUGIN_INSTALL_MODE=local /plugin install ...
+/plugin install plan-subdivider@plan-subdivider --scope local
 ```
 
 ### Subdivision Criteria
@@ -347,21 +343,20 @@ mongodb-to-postgres/
 ### Rules not installed
 
 ```bash
-# Manually run installation script
-bash ~/.claude/plugins/plan-subdivider/scripts/install-rules.sh
+# Reinstall the plugin to trigger rule installation
+/plugin install plan-subdivider@plan-subdivider
 ```
 
 ### `/subdivide` not recognized
 
-1. Verify plugin is enabled:
+1. Verify plugin is installed:
    ```bash
    /plugin list
    ```
 
-2. Check skill installation:
+2. Check marketplace is registered:
    ```bash
-   ls ~/.claude/plugins/plan-subdivider/skills/plan-subdivide/
-   # Should show: SKILL.md
+   /plugin   # Go to Marketplaces tab and verify plan-subdivider is listed
    ```
 
 3. Restart Claude Code

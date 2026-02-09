@@ -59,26 +59,22 @@
 
 ### 1. 설치
 
-**1단계: 마켓플레이스 추가**
-
-Claude Code를 열고 다음 명령어 실행:
-```bash
-/plugin
-```
-
-그 다음:
-1. **Marketplaces** 탭으로 이동
-2. **"Add Marketplace"** 버튼 클릭
-3. Git URL 입력:
-   ```
-   https://github.com/sanghyun-io/plan-subdivider.git
-   ```
-
-**2단계: 플러그인 설치**
+**방법 A: CLI (권장)**
 
 ```bash
-/plugin install plan-subdivider@sanghyun-io-plan-subdivider
+# 마켓플레이스 추가
+/plugin marketplace add sanghyun-io/plan-subdivider
+
+# 플러그인 설치
+/plugin install plan-subdivider@plan-subdivider
 ```
+
+**방법 B: UI**
+
+1. `/plugin` 실행
+2. **Marketplaces** 탭 → **"Add Marketplace"** 클릭
+3. 입력: `https://github.com/sanghyun-io/plan-subdivider.git`
+4. 플러그인 목록에서 `plan-subdivider` 설치
 
 끝! 플러그인이 첫 실행 시 자동으로 규칙을 `.claude/rules/`에 설치합니다.
 
@@ -265,13 +261,13 @@ plan-subdivider/
 
 ```bash
 # 전역 (기본값) - 모든 프로젝트에서 사용 가능
-/plugin install https://github.com/sanghyun-io/plan-subdivider
+/plugin install plan-subdivider@plan-subdivider
 
 # 프로젝트 - 팀과 git으로 공유
-CLAUDE_PLUGIN_INSTALL_MODE=project /plugin install ...
+/plugin install plan-subdivider@plan-subdivider --scope project
 
 # 로컬 - 프로젝트 전용, gitignored
-CLAUDE_PLUGIN_INSTALL_MODE=local /plugin install ...
+/plugin install plan-subdivider@plan-subdivider --scope local
 ```
 
 ### 세분화 기준
@@ -348,21 +344,20 @@ mongodb-to-postgres/
 ### 규칙이 설치되지 않음
 
 ```bash
-# 설치 스크립트 수동 실행
-bash ~/.claude/plugins/plan-subdivider/scripts/install-rules.sh
+# 플러그인을 재설치하여 규칙 설치 트리거
+/plugin install plan-subdivider@plan-subdivider
 ```
 
 ### `/subdivide`가 인식되지 않음
 
-1. 플러그인이 활성화되어 있는지 확인:
+1. 플러그인이 설치되어 있는지 확인:
    ```bash
    /plugin list
    ```
 
-2. 스킬 설치 확인:
+2. 마켓플레이스가 등록되어 있는지 확인:
    ```bash
-   ls ~/.claude/plugins/plan-subdivider/skills/plan-subdivide/
-   # SKILL.md가 표시되어야 함
+   /plugin   # Marketplaces 탭에서 plan-subdivider가 있는지 확인
    ```
 
 3. Claude Code 재시작

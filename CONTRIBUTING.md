@@ -175,10 +175,14 @@ When releasing a new version:
 Test your changes locally:
 
 ```bash
-# Install plugin locally
-cp -r . ~/.claude/plugins/plan-subdivider-dev
+# In Claude Code, use --plugin-dir to load from local directory
+claude --plugin-dir /path/to/your/plan-subdivider
 
-# In Claude Code
+# Or reinstall from your fork's marketplace
+/plugin marketplace add YOUR-USERNAME/plan-subdivider
+/plugin install plan-subdivider@plan-subdivider
+
+# Verify
 /plugin list
 /subdivide
 ```

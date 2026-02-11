@@ -51,6 +51,7 @@ Each task file includes:
 | **🔗 Task Navigation** | Previous/next links for sequential execution |
 | **✅ Built-in Verification** | Auto-generated verification commands per task |
 | **🚦 Pre-work Workflow** | Claude suggests subdivision before starting implementation |
+| **🔀 Git Workflow Setup** | Choose work environment: current branch, new branch, or git worktree |
 | **📐 Rule-based Structure** | Consistent formatting across all plans |
 
 ---

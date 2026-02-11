@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Task status tracking integration
 - Plan templates library
 - Interactive task progress visualization
+- Git integration for task commits
 - Estimated time tracking per task
 - Dependency graph visualization
 

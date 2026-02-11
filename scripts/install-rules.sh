@@ -11,16 +11,16 @@ echo -e "${BLUE}  Plan Structure Plugin - Rules Installation${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# Plugin의 rules 디렉토리
+# Plugin's rules directory
 PLUGIN_RULES="${CLAUDE_PLUGIN_ROOT}/rules"
 
-# 프로젝트의 .claude/rules 디렉토리
+# Project's .claude/rules directory
 PROJECT_RULES=".claude/rules"
 
-# 전역 rules 디렉토리 (선택적)
+# Global rules directory (optional)
 GLOBAL_RULES="$HOME/.claude/rules"
 
-# 설치 모드 확인 (환경 변수로 제어 가능)
+# Check install mode (controlled via environment variable)
 INSTALL_MODE="${CLAUDE_PLUGIN_INSTALL_MODE:-project}"
 
 if [ "$INSTALL_MODE" = "global" ]; then
@@ -31,16 +31,16 @@ else
   echo -e "📦 Installing rules to: ${GREEN}.claude/rules${NC} (project)"
 fi
 
-# 대상 디렉토리 생성
+# Create target directory
 mkdir -p "$TARGET_DIR"
 
-# 규칙 파일 복사
+# Copy rule files
 INSTALLED_COUNT=0
 for rule_file in "$PLUGIN_RULES"/*.md; do
   if [ -f "$rule_file" ]; then
     filename=$(basename "$rule_file")
 
-    # 이미 존재하는 파일 확인
+    # Check if file already exists
     if [ -f "$TARGET_DIR/$filename" ]; then
       echo -e "⚠️  ${filename} already exists, skipping..."
     else
@@ -58,7 +58,7 @@ echo -e "${GREEN}  ${INSTALLED_COUNT} rule file(s) installed${NC}"
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# CLAUDE.md 업데이트 안내
+# CLAUDE.md update notice
 if [ "$INSTALL_MODE" = "project" ] && [ ! -f ".claude/CLAUDE.md" ]; then
   echo -e "${BLUE}💡 Tip: Add the following to your CLAUDE.md:${NC}"
   echo ""
@@ -67,7 +67,7 @@ if [ "$INSTALL_MODE" = "project" ] && [ ! -f ".claude/CLAUDE.md" ]; then
   echo ""
 fi
 
-# 사용법 안내
+# Usage guide
 echo -e "${BLUE}📚 Usage:${NC}"
 echo "  /subdivide              - Subdivide latest plan"
 echo "  /subdivide <plan-path>  - Subdivide specific plan"

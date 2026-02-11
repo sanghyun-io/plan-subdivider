@@ -2,288 +2,288 @@
 rule_type: workflow
 applies_to:
   - "~/.claude/plans/*.md"
-  - "계획 파일 작성"
-  - "계획 실행"
+  - "Plan file creation"
+  - "Plan execution"
 triggers:
   - event: "plan_execute"
-    description: "계획 파일 실행 시작 시 - Pre-work 먼저 수행 후 구현"
+    description: "When plan file execution begins - perform Pre-work before implementation"
   - event: "plan_created"
-    description: "계획 파일 작성 완료 시"
+    description: "When plan file creation is complete"
 ---
 
 # Plan Structure Rules
 
-계획(Plan) 작성 시 따라야 할 구조화 규칙입니다.
+Rules for structuring plans.
 
 ---
 
-## 🔴 필수 행동 (Action Required)
+## 🔴 Required Actions (Action Required)
 
-> **MUST DO**: 이 규칙이 적용되는 상황에서 아래 행동을 반드시 수행하세요.
+> **MUST DO**: You must perform the following actions whenever this rule applies.
 
-### Plan 실행 시 첫 번째 작업 (Pre-work)
+### First Task When Executing a Plan (Pre-work)
 
-> ⛔ 사용자가 "시작"을 선택하면, **코드를 읽거나 구현하기 전에** 반드시 아래를 먼저 수행:
+> ⛔ When the user selects "Start", you **must** perform the following **before reading code or beginning implementation**:
 
-| 순서 | 확인 사항 | 조건 | 행동 |
-|:----:|----------|------|------|
-| 1 | Task 개수 확인 | Task ≥ 3개 | `/subdivide` 실행 여부를 **AskUserQuestion으로** 확인 |
-| 2 | 복잡도 확인 | 다중 파일 수정 | `/review` 실행 여부를 **AskUserQuestion으로** 확인 |
-| 3 | Pre-work 완료 | - | 그 다음에 실제 구현 시작 |
+| Order | Check | Condition | Action |
+|:-----:|-------|-----------|--------|
+| 1 | Task count | Task ≥ 3 | Confirm whether to run `/subdivide` **using AskUserQuestion** |
+| 2 | Complexity | Multi-file changes | Confirm whether to run `/review` **using AskUserQuestion** |
+| 3 | Pre-work complete | - | Then begin actual implementation |
 
-#### ✅ AskUserQuestion 사용 (필수)
+#### ✅ AskUserQuestion Usage (Required)
 
-> **CRITICAL**: 사용자에게 확인을 받아야 하는 **모든 상황**에서 일반 텍스트 대신 **반드시 AskUserQuestion 도구를 사용**해야 합니다.
+> **CRITICAL**: In **all situations** requiring user confirmation, you **must use the AskUserQuestion tool** instead of plain text.
 
-##### 적용 범위
+##### Scope
 
-**AskUserQuestion 사용이 필수인 경우**:
-1. **Pre-work 확인**: Plan 실행 전 `/subdivide`, `/review` 실행 여부
-2. **스킬 내부 확인**: `/subdivide` 실행 중 세분화 계획 승인, 완료 후 다음 단계 선택
-3. **작업 진행 확인**: 다중 선택지가 있는 모든 의사결정 시점
-4. **위험한 작업**: 파일 삭제, 덮어쓰기 등 되돌릴 수 없는 작업 전
+**Cases where AskUserQuestion is required**:
+1. **Pre-work confirmation**: Whether to run `/subdivide`, `/review` before plan execution
+2. **In-skill confirmation**: Subdivision plan approval during `/subdivide`, next step selection after completion
+3. **Progress confirmation**: All decision points with multiple choices
+4. **Dangerous operations**: Before irreversible operations such as file deletion or overwriting
 
-##### Pre-work 확인 예시
+##### Pre-work Confirmation Example
 
 ```json
 {
   "questions": [{
-    "question": "Plan 실행 전 Pre-work를 진행하시겠습니까?",
+    "question": "Would you like to run Pre-work before plan execution?",
     "header": "Pre-work",
     "multiSelect": false,
     "options": [
-      {"label": "스킵하고 바로 시작", "description": "Pre-work 없이 구현 시작"},
-      {"label": "/subdivide 실행", "description": "계획을 세부 파일로 분리"},
-      {"label": "/review 실행", "description": "Momus로 계획 검토"}
+      {"label": "Skip and start now", "description": "Begin implementation without Pre-work"},
+      {"label": "Run /subdivide", "description": "Subdivide the plan into detailed task files"},
+      {"label": "Run /review", "description": "Review the plan with Momus"}
     ]
   }]
 }
 ```
 
-##### 스킬 내부 확인 예시
+##### In-skill Confirmation Example
 
-`/subdivide` 스킬에서 세분화 계획 승인:
+Subdivision plan approval in `/subdivide` skill:
 ```json
 {
   "questions": [{
-    "question": "이대로 세분화를 진행하시겠습니까?",
-    "header": "세분화 확인",
+    "question": "Proceed with this subdivision plan?",
+    "header": "Confirm",
     "multiSelect": false,
     "options": [
-      {"label": "진행", "description": "세분화 계획대로 파일 생성"},
-      {"label": "수정 필요", "description": "계획을 다시 검토하고 수정"},
-      {"label": "취소", "description": "세분화 작업 중단"}
+      {"label": "Proceed", "description": "Start creating files as planned"},
+      {"label": "Needs revision", "description": "Review and revise the plan"},
+      {"label": "Cancel", "description": "Abort subdivision"}
     ]
   }]
 }
 ```
 
-##### 금지 사항
+##### Prohibited
 
-- ❌ 텍스트로 물어보기: "subdivide 실행할까요?", "이대로 진행할까요?", "작업을 시작하시겠습니까?"
-- ❌ 선택지 없이 지시만 하기: "다음 명령어로 작업을 시작하세요"
-- ✅ **모든 확인**에 AskUserQuestion 도구 사용 필수
+- ❌ Asking as plain text: "Shall I run subdivide?", "Proceed as planned?", "Would you like to start?"
+- ❌ Giving instructions without choices: "Start the task with the following command"
+- ✅ **All confirmations** must use the AskUserQuestion tool
 
-#### ⛔ Plan 재검색 금지
+#### ⛔ No Re-searching Plans
 
-- 현재 대화 컨텍스트에 Plan 내용이 **이미 있으면** 다시 검색/읽기 금지
-- ExitPlanMode 후 구현 시작 시, 컨텍스트의 Plan 정보 활용
-- 새 세션에서 Plan 실행 요청 시에만 Plan 파일 읽기
+- If Plan content is **already in the current conversation context**, do not search/read it again
+- When starting implementation after ExitPlanMode, use the Plan information from context
+- Only read Plan files when a plan execution is requested in a new session
 
-### ⛔ 금지 사항
+### ⛔ Prohibited
 
-- Pre-work 없이 코드 읽기/구현 시작 금지
-- 새 세션에서 계획 실행 요청 시에도 Pre-work를 먼저 수행
-- Plan 파일을 읽자마자 바로 구현 들어가는 것 금지
-- **Claude가 자체 판단으로 `/subdivide`, `/review` 스킵 결정 금지**
-  - "이미 상세함", "명확히 구분됨", "구조화 되어있음" 등의 이유로 스킵 불가
-  - 조건 충족 시 **반드시** 사용자에게 실행 여부를 **질문**해야 함
-  - 사용자가 "아니오"라고 답해야만 스킵 가능
+- Starting code reading/implementation without Pre-work
+- Even when a plan execution is requested in a new session, Pre-work must be performed first
+- Jumping straight into implementation after reading a Plan file
+- **Claude must NOT decide to skip `/subdivide` or `/review` on its own**
+  - Cannot skip for reasons like "already detailed enough", "clearly separated", "well-structured"
+  - When conditions are met, you **must ask** the user whether to run them
+  - Skip is only allowed when the user explicitly answers "no"
 
 ---
 
-## 연동 스킬 (Linked Skills)
+## Linked Skills
 
-<!-- @linked-skills: 이 테이블의 스킬은 조건 충족 시 자동으로 제안되어야 합니다 -->
+<!-- @linked-skills: Skills in this table should be automatically suggested when conditions are met -->
 
-| 스킬 | 트리거 조건 | 실행 방식 | 설명 |
-|------|------------|:--------:|------|
-| `/subdivide` | Task ≥ 3개 AND Plan 실행 시작 시 (Pre-work) | confirm | 계획을 세부 파일로 분리 |
-| `/review` | 다중 파일 수정 AND Plan 실행 시작 시 (Pre-work) | confirm | Momus로 계획 검토 |
-| `/plan` | 새 계획 필요 시 | auto | Prometheus로 계획 작성 |
+| Skill | Trigger Condition | Execution Mode | Description |
+|-------|-------------------|:--------------:|-------------|
+| `/subdivide` | Task ≥ 3 AND Plan execution starting (Pre-work) | confirm | Subdivide plan into detailed task files |
+| `/review` | Multi-file changes AND Plan execution starting (Pre-work) | confirm | Review plan with Momus |
+| `/plan` | When a new plan is needed | auto | Create plan with Prometheus |
 
-**실행 방식 설명**:
-- `auto`: 조건 충족 시 자동 실행
-- `confirm`: 조건 충족 시 **반드시** 사용자에게 실행 여부 질문 (Claude가 임의로 스킵 판단 금지)
-- `ask`: 사용자에게 필요 여부 질문
+**Execution mode descriptions**:
+- `auto`: Execute automatically when conditions are met
+- `confirm`: **Must** ask the user whether to execute when conditions are met (Claude cannot decide to skip on its own)
+- `ask`: Ask the user whether it is needed
 
-**⚠️ `confirm` 주의사항**:
-- Claude는 "이미 충분히 상세함", "Task별로 구분됨" 등의 이유로 스킵을 **자체 결정할 수 없음**
-- 조건(Task ≥ 3개)이 충족되면 **무조건 사용자에게 질문**해야 함
-- 사용자가 명시적으로 "스킵", "아니오", "필요없음" 등 답변 시에만 스킵 가능
+**⚠️ `confirm` notes**:
+- Claude cannot **decide to skip on its own** for reasons like "already detailed enough" or "well-separated by task"
+- When the condition (Task ≥ 3) is met, you **must always ask the user**
+- Skip is only allowed when the user explicitly answers "skip", "no", "not needed", etc.
 
-**⛔ 중요**: `/subdivide`와 `/review`는 Plan 실행의 **첫 번째 작업(Pre-work)**으로, 코드를 읽거나 구현하기 전에 확인해야 합니다.
+**⛔ Important**: `/subdivide` and `/review` are the **first actions (Pre-work)** of plan execution and must be confirmed before reading code or beginning implementation.
 
 <!-- @/linked-skills -->
 
 ---
 
-## 적용 시점
+## When This Applies
 
-- Plan 모드에서 계획 작성 시
-- `/plan`, `/prometheus` 실행 시
-- 복잡한 작업 계획 수립 시
+- When writing plans in Plan mode
+- When running `/plan`, `/prometheus`
+- When creating complex work plans
 
 ---
 
-## 메인 계획 파일 구조
+## Main Plan File Structure
 
-메인 계획 파일은 다음 구조를 따릅니다:
+Main plan files follow this structure:
 
 ```markdown
-# {계획 제목}
+# {plan title}
 
-> **작성일**: YYYY-MM-DD
-> **목적**: {계획의 목적 한 줄 설명}
+> **Created**: YYYY-MM-DD
+> **Purpose**: {one-line description of the plan's purpose}
 
 ---
 
-## 실행 계획 목차 (Implementation Tasks)
+## Implementation Tasks
 
-이 계획서는 N개의 세부 작업으로 분리되었습니다. 순서대로 실행하세요.
+This plan has been divided into N detailed tasks. Execute them in order.
 
-| 순서 | 작업명 | 파일 | 설명 |
-|:----:|--------|------|------|
-| 1 | **작업1** | [01-task-name.md](./plan-name/01-task-name.md) | 작업 설명 |
-| 2 | **작업2** | [02-task-name.md](./plan-name/02-task-name.md) | 작업 설명 |
+| Order | Task Name | File | Description |
+|:-----:|-----------|------|-------------|
+| 1 | **Task 1** | [01-task-name.md](./plan-name/01-task-name.md) | Task description |
+| 2 | **Task 2** | [02-task-name.md](./plan-name/02-task-name.md) | Task description |
 | ... | ... | ... | ... |
 
-### 작업 규칙
+### Task Rules
 
-1. **순차 실행**: Task 01부터 순서대로 진행
-2. **체크리스트**: 각 작업의 모든 항목을 체크 후 다음으로 이동
-3. **Lint 검사**: 각 작업 완료 시 코드 검증 실행
-4. **링크 확인**: 작업 파일 하단의 "다음 작업" 링크로 이동
+1. **Sequential execution**: Proceed in order starting from Task 01
+2. **Checklist**: Check all items in each task before moving to the next
+3. **Lint check**: Run code verification upon completing each task
+4. **Follow links**: Navigate using the "Next Task" link at the bottom of each task file
 
 ---
 
-## 핵심 내용
+## Core Content
 
-{계획의 핵심 내용...}
+{Core content of the plan...}
 ```
 
 ---
 
-## 세부 계획 파일 구조
+## Task File Structure
 
-각 세부 작업 파일은 다음 구조를 따릅니다:
+Each task file follows this structure:
 
 ```markdown
-# Task {순서}: {작업명}
+# Task {order}: {task name}
 
-> **순서**: {현재}/{전체}
-> **이전 작업**: [{이전 작업명}](./{이전 파일}) 또는 (없음 - 시작 작업)
-> **다음 작업**: [{다음 작업명}](./{다음 파일}) 또는 (없음 - 마지막 작업)
-> **참조**: 원본 계획서 {섹션 참조}
+> **Order**: {current}/{total}
+> **Previous task**: [{previous task name}](./{previous file}) or (none - first task)
+> **Next task**: [{next task name}](./{next file}) or (none - last task)
+> **Reference**: Original plan {section reference}
 
 ---
 
-## 목표
+## Objective
 
-{이 작업의 목표 설명}
+{Description of this task's objective}
 
 ---
 
 ## Checklist
 
-### 1. {첫 번째 단계}
+### 1. {First step}
 
-- [ ] {세부 작업 1}
-- [ ] {세부 작업 2}
-  - 코드 예시나 상세 설명 포함 가능
+- [ ] {Sub-task 1}
+- [ ] {Sub-task 2}
+  - Code examples or detailed descriptions may be included
 
-### 2. {두 번째 단계}
+### 2. {Second step}
 
-- [ ] {세부 작업 3}
-- [ ] {세부 작업 4}
-
----
-
-## 완료 조건
-
-1. 모든 Checklist 항목 체크 완료
-2. 빌드 성공 (해당 시)
-3. 테스트 통과 (해당 시)
+- [ ] {Sub-task 3}
+- [ ] {Sub-task 4}
 
 ---
 
-## 검증 명령어
+## Completion Criteria
 
-작업 완료 후 아래 명령어 실행:
+1. All Checklist items checked
+2. Build succeeds (if applicable)
+3. Tests pass (if applicable)
+
+---
+
+## Verification Commands
+
+Run the following commands after completing the task:
 
 \`\`\`bash
-{프로젝트에 맞는 검증 명령어}
+{verification commands appropriate for the project}
 \`\`\`
 
 ---
 
-## 다음 작업 안내
+## Next Task
 
-검증 통과 후, 다음 작업으로 이동:
+After verification passes, proceed to the next task:
 
-**[Task {다음 순서}: {다음 작업명}](./{다음 파일})**
+**[Task {next order}: {next task name}](./{next file})**
 
-다음 작업에서는:
-- {다음 작업 요약 1}
-- {다음 작업 요약 2}
+In the next task:
+- {Next task summary 1}
+- {Next task summary 2}
 
 ---
 
-*생성일: YYYY-MM-DD*
+*Created: YYYY-MM-DD*
 ```
 
 ---
 
-## 세분화 기준
+## Subdivision Criteria
 
-계획을 세부 작업으로 분리하는 기준:
+Criteria for splitting a plan into detailed tasks:
 
-### 분리해야 할 경우
+### When to Subdivide
 
-1. **독립적인 결과물**: 각 작업이 독립적으로 완료 가능
-2. **논리적 단계**: 순차적으로 진행해야 하는 단계
-3. **다른 영역**: 서로 다른 코드/파일 영역
-4. **검증 가능**: 각 작업 완료 후 검증 가능
+1. **Independent deliverables**: Each task can be completed independently
+2. **Logical stages**: Steps that must proceed sequentially
+3. **Different areas**: Different code/file areas
+4. **Verifiable**: Each task can be verified after completion
 
-### 분리 예시
+### Subdivision Examples
 
-| 작업 유형 | 분리 단위 |
-|----------|----------|
-| 엔티티 추가 | Domain → Repository → Service → Controller |
-| API 개발 | 엔드포인트별 또는 기능별 |
-| 리팩토링 | 모듈별 또는 계층별 |
-| 마이그레이션 | 단계별 (준비 → 실행 → 검증 → 정리) |
+| Task Type | Subdivision Unit |
+|-----------|-----------------|
+| Adding entities | Domain → Repository → Service → Controller |
+| API development | Per endpoint or per feature |
+| Refactoring | Per module or per layer |
+| Migration | By stage (Preparation → Execution → Verification → Cleanup) |
 
 ---
 
-## 파일 네이밍 규칙
+## File Naming Conventions
 
-### 메인 계획
+### Main Plan
 
-- 위치: `~/.claude/plans/{plan-name}.md`
-- 네이밍: Claude가 자동 생성하는 이름 사용
+- Location: `~/.claude/plans/{plan-name}.md`
+- Naming: Use the auto-generated name from Claude
 
-### 세부 계획 폴더
+### Task Files Folder
 
-- 위치: `~/.claude/plans/{plan-name}/`
-- 파일: `{순서2자리}-{작업명-kebab-case}.md`
+- Location: `~/.claude/plans/{plan-name}/`
+- Files: `{2-digit-order}-{task-name-kebab-case}.md`
 
-### 예시
+### Example
 
 ```
 ~/.claude/plans/
-├── jaunty-greeting-puffin.md           # 메인 계획
-└── jaunty-greeting-puffin/             # 세부 계획 폴더
+├── jaunty-greeting-puffin.md           # Main plan
+└── jaunty-greeting-puffin/             # Task files folder
     ├── 01-campaign-response-entity.md
     ├── 02-evaluation-result-entity.md
     ├── 03-audit-log-enhancement.md
@@ -294,21 +294,21 @@ triggers:
 
 ---
 
-## 체크리스트 작성 규칙
+## Checklist Writing Guidelines
 
-### 좋은 체크리스트
+### Good Checklists
 
-- [ ] **구체적**: 무엇을 해야 하는지 명확
-- [ ] **검증 가능**: 완료 여부 판단 가능
-- [ ] **독립적**: 다른 항목과 중복되지 않음
-- [ ] **순서 고려**: 의존성 있으면 순서대로 배치
+- [ ] **Specific**: Clearly states what needs to be done
+- [ ] **Verifiable**: Completion can be determined
+- [ ] **Independent**: No overlap with other items
+- [ ] **Ordered**: Arranged by dependency order
 
-### 코드 예시 포함
+### Including Code Examples
 
-체크리스트 항목에 코드 예시가 필요하면 들여쓰기로 포함:
+If a checklist item needs a code example, include it with indentation:
 
 ```markdown
-- [ ] `UserService.kt` 생성
+- [ ] Create `UserService.kt`
   ```kotlin
   interface UserService {
       fun getUser(id: Long): User
@@ -318,5 +318,5 @@ triggers:
 
 ---
 
-*이 규칙은 Plan 모드, Prometheus, 기타 계획 작성 에이전트에서 자동으로 참조됩니다.*
-*마지막 수정: 2026-02-05*
+*This rule is automatically referenced by Plan mode, Prometheus, and other plan-writing agents.*
+*Last modified: 2026-02-05*

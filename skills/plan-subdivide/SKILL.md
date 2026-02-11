@@ -1,340 +1,340 @@
 ---
 name: subdivide
-description: 계획 파일을 세부 작업 파일로 분리. Plan 모드 완료 후 세부 계획 구조화에 사용.
+description: Subdivide a plan file into detailed task files. Used to structure detailed plans after completing Plan mode.
 invocation:
   command: subdivide
   user_invocable: true
   args:
     - name: plan_path
-      description: 세분화할 계획 파일 경로 (생략 시 가장 최근 계획)
+      description: Path to the plan file to subdivide (defaults to most recent plan if omitted)
       required: false
 ---
 
 # Plan Subdivide Skill
 
-기존 계획 파일을 세부 작업 파일로 분리하는 스킬입니다.
+A skill that breaks down an existing plan file into detailed task files.
 
 ---
 
-## ⚠️ Plan 모드 체크 (최우선)
+## ⚠️ Plan Mode Check (Top Priority)
 
-> **IMPORTANT**: Plan 모드라면 먼저 탈출 후 이 스킬을 실행하세요.
+> **IMPORTANT**: If you are in Plan mode, exit it first before running this skill.
 
-### Plan 모드 감지 시 행동
+### Behavior When Plan Mode is Detected
 
-1. **ExitPlanMode 실행**: Plan 모드를 먼저 탈출
-2. **그 다음 `/subdivide` 정상 실행**: 탈출 후 Step 1부터 진행
+1. **Run ExitPlanMode**: Exit Plan mode first
+2. **Then run `/subdivide` normally**: Proceed from Step 1 after exiting
 
-### 왜 Plan 모드 탈출이 필요한가?
+### Why Is Exiting Plan Mode Necessary?
 
-- Plan 모드에서는 파일 생성(Write)이 계획 파일로 해석됨
-- 계획 분석 과정에서 새로운 계획을 작성하려는 동작이 발생
-- Plan 모드 탈출 후 정상적으로 세분화 작업 가능
+- In Plan mode, file creation (Write) is interpreted as a plan file
+- During plan analysis, the system attempts to write a new plan
+- After exiting Plan mode, subdivision work can proceed normally
 
 ---
 
-## 사용법
+## Usage
 
 ```bash
-/subdivide                           # 가장 최근 계획 파일 세분화
-/subdivide ~/.claude/plans/my-plan.md  # 특정 계획 파일 세분화
+/subdivide                           # Subdivide the most recent plan file
+/subdivide ~/.claude/plans/my-plan.md  # Subdivide a specific plan file
 ```
 
 ---
 
-## 실행 단계
+## Execution Steps
 
-### Step 0: Plan 모드 탈출
+### Step 0: Exit Plan Mode
 
-1. 현재 Plan 모드인지 확인
-2. Plan 모드라면 `ExitPlanMode` 실행하여 탈출
-3. 탈출 완료 후 Step 1로 진행
+1. Check if currently in Plan mode
+2. If in Plan mode, run `ExitPlanMode` to exit
+3. After exiting, proceed to Step 1
 
-### Step 1: 계획 파일 확인
+### Step 1: Locate Plan File
 
-1. 인자로 경로가 제공되면 해당 파일 사용
-2. **현재 대화 컨텍스트에서 Plan 파일 탐색**:
-   - 컨텍스트에 Plan 내용(계획 제목, 파일 경로 등)이 있으면 해당 파일 사용
-   - ExitPlanMode 직후라면 방금 작성한 계획 파일을 우선 사용
-   - 컨텍스트에서 Plan 파일명을 추출할 수 없으면 다음 단계로
-3. 위 두 경우 모두 해당 없으면 `~/.claude/plans/` 에서 가장 최근 수정된 `.md` 파일 선택
-4. 이미 세분화된 계획(폴더 존재)이면 경고 후 확인 요청
+1. If a path is provided as an argument, use that file
+2. **Search the current conversation context for the Plan file**:
+   - If the context contains Plan content (plan title, file path, etc.), use that file
+   - If immediately after ExitPlanMode, prioritize the plan file just created
+   - If the Plan filename cannot be extracted from context, proceed to next step
+3. If neither of the above applies, select the most recently modified `.md` file from `~/.claude/plans/`
+4. If the plan is already subdivided (folder exists), warn and request confirmation
 
-### Step 2: 계획 분석
+### Step 2: Analyze Plan
 
-계획 파일을 읽고 다음을 추출:
+Read the plan file and extract:
 
-1. **전체 목표**: 계획의 주요 목적
-2. **작업 목록**: 수행해야 할 작업들
-3. **의존성**: 작업 간 순서/의존성
-4. **참조 섹션**: 원본 계획서 내 섹션 번호
+1. **Overall objective**: The main purpose of the plan
+2. **Task list**: Tasks to be performed
+3. **Dependencies**: Order/dependencies between tasks
+4. **Reference sections**: Section numbers in the original plan
 
-분석 기준 (Rules 참조: @~/.claude/rules/plan-structure.md):
-- 독립적 결과물 단위로 분리
-- 논리적 순서 고려
-- 검증 가능한 단위로 구성
+Analysis criteria (Rules reference: @~/.claude/rules/plan-structure.md):
+- Separate by independent deliverable units
+- Consider logical ordering
+- Compose into verifiable units
 
-### Step 3: 세부 작업 정의
+### Step 3: Define Detailed Tasks
 
-추출된 정보를 바탕으로 세부 작업 정의:
+Define detailed tasks based on extracted information:
 
 ```
-작업 1: {작업명}
-  - 목표: {목표}
-  - 체크리스트: [{항목들}]
-  - 참조: {원본 섹션}
+Task 1: {task name}
+  - Objective: {objective}
+  - Checklist: [{items}]
+  - Reference: {original section}
 
-작업 2: {작업명}
+Task 2: {task name}
   ...
 ```
 
-### Step 4: 사용자 확인
+### Step 4: User Confirmation
 
-세분화 계획을 사용자에게 보여주고 **AskUserQuestion으로** 확인:
+Show the subdivision plan to the user and confirm **using AskUserQuestion**:
 
 ```
-## 세분화 계획
+## Subdivision Plan
 
-원본: {계획 파일명}
-세부 작업 수: {N}개
+Source: {plan filename}
+Number of tasks: {N}
 
-| 순서 | 작업명 | 설명 |
-|:----:|--------|------|
-| 1 | {작업1} | {설명1} |
-| 2 | {작업2} | {설명2} |
+| Order | Task Name | Description |
+|:-----:|-----------|-------------|
+| 1 | {task1} | {description1} |
+| 2 | {task2} | {description2} |
 ...
 ```
 
-그 다음 **반드시 AskUserQuestion 도구 사용**:
+Then **you must use the AskUserQuestion tool**:
 
 ```json
 {
   "questions": [{
-    "question": "이대로 세분화를 진행하시겠습니까?",
-    "header": "세분화 확인",
+    "question": "Proceed with this subdivision plan?",
+    "header": "Confirm",
     "multiSelect": false,
     "options": [
       {
-        "label": "진행",
-        "description": "세분화 계획대로 파일 생성 시작 (Shift+Tab으로 일괄 허용 가능)"
+        "label": "Proceed",
+        "description": "Start creating files as planned (use Shift+Tab to allow all at once)"
       },
       {
-        "label": "수정 필요",
-        "description": "계획을 다시 검토하고 수정"
+        "label": "Needs revision",
+        "description": "Review and revise the plan"
       },
       {
-        "label": "취소",
-        "description": "세분화 작업 중단"
+        "label": "Cancel",
+        "description": "Abort subdivision"
       }
     ]
   }]
 }
 ```
 
-**⚠️ 중요**:
-- 일반 텍스트로 "이대로 세분화를 진행할까요?"라고 물어보지 말 것
-- 반드시 AskUserQuestion 도구를 사용하여 선택지 제공
+**⚠️ Important**:
+- Do NOT ask "Shall we proceed with this subdivision?" as plain text
+- You MUST use the AskUserQuestion tool to provide choices
 
-### Step 5: 파일 생성
+### Step 5: File Generation
 
-사용자 승인 후:
+After user approval:
 
-1. **폴더 생성**: `~/.claude/plans/{plan-name}/`
-2. **세부 파일 생성**: `{순서2자리}-{작업명}.md`
-3. **메인 파일 업데이트**: 목차 테이블 추가
+1. **Create folder**: `~/.claude/plans/{plan-name}/`
+2. **Create task files**: `{2-digit-order}-{task-name}.md`
+3. **Update main file**: Add table of contents
 
-> **⚠️ 중요**: Step 4에서 사용자가 승인하면, 모든 세부 파일을 **한 번에 생성**합니다.
-> 각 파일마다 개별 확인을 요청하지 마세요.
-> - 모든 Write 작업을 **단일 메시지에서 병렬로** 실행
-> - 사용자에게 매 파일마다 확인을 요청하지 않음
-> - Step 4의 승인이 전체 파일 생성에 대한 승인임
+> **⚠️ Important**: Once the user approves in Step 4, create all task files **at once**.
+> Do not ask for individual confirmation for each file.
+> - Execute all Write operations **in parallel within a single message**
+> - Do not ask the user for confirmation for each file
+> - The approval in Step 4 covers all file generation
 
-### Step 6: 완료 보고 및 다음 단계
+### Step 6: Completion Report and Next Steps
 
-완료 보고 후 **AskUserQuestion으로** 다음 단계 제안:
+After the completion report, suggest next steps **using AskUserQuestion**:
 
 ```
-## 세분화 완료 ✅
+## Subdivision Complete ✅
 
-{계획명}이 {N}개의 세부 작업으로 성공적으로 분리되었습니다.
+{plan name} has been successfully divided into {N} detailed tasks.
 
-생성된 파일:
-- 메인 계획: ~/.claude/plans/{plan-name}.md
-- 세부 작업: ~/.claude/plans/{plan-name}/01-{첫번째}.md ~ {N}-{마지막}.md
+Generated files:
+- Main plan: ~/.claude/plans/{plan-name}.md
+- Task files: ~/.claude/plans/{plan-name}/01-{first}.md ~ {N}-{last}.md
 ```
 
-그 다음 **반드시 AskUserQuestion 도구 사용**:
+Then **you must use the AskUserQuestion tool**:
 
 ```json
 {
   "questions": [{
-    "question": "다음 단계를 선택하세요",
-    "header": "다음 단계",
+    "question": "Select the next step",
+    "header": "Next step",
     "multiSelect": false,
     "options": [
       {
-        "label": "첫 번째 작업 시작",
-        "description": "Task 01 파일을 열고 즉시 구현 시작"
+        "label": "Start first task",
+        "description": "Open Task 01 file and begin implementation immediately"
       },
       {
-        "label": "계획 전체 검토",
-        "description": "메인 계획 파일과 모든 세부 작업 검토"
+        "label": "Review entire plan",
+        "description": "Review the main plan file and all task files"
       },
       {
-        "label": "나중에",
-        "description": "지금은 파일만 생성하고 나중에 작업"
+        "label": "Later",
+        "description": "Just generate the files for now, work on them later"
       }
     ]
   }]
 }
 ```
 
-**⚠️ 중요**:
-- 일반 텍스트로 "작업을 시작하세요" 같은 지시만 하지 말 것
-- 반드시 AskUserQuestion 도구를 사용하여 선택지 제공
+**⚠️ Important**:
+- Do NOT just give instructions like "Start working on the task" as plain text
+- You MUST use the AskUserQuestion tool to provide choices
 
 ---
 
-## 세부 파일 템플릿
+## Task File Template
 
-각 세부 파일은 다음 구조로 생성:
+Each task file is generated with the following structure:
 
 ```markdown
-# Task {순서}: {작업명}
+# Task {order}: {task name}
 
-> **순서**: {현재}/{전체}
-> **이전 작업**: [{이전 작업명}](./{이전 파일}) 또는 (없음 - 시작 작업)
-> **다음 작업**: [{다음 작업명}](./{다음 파일}) 또는 (없음 - 마지막 작업)
-> **참조**: 원본 계획서 {섹션 참조}
+> **Order**: {current}/{total}
+> **Previous task**: [{previous task name}](./{previous file}) or (none - first task)
+> **Next task**: [{next task name}](./{next file}) or (none - last task)
+> **Reference**: Original plan {section reference}
 
 ---
 
-## 목표
+## Objective
 
-{원본 계획에서 추출한 이 작업의 목표}
+{Objective for this task extracted from the original plan}
 
 ---
 
 ## Checklist
 
-### 1. {첫 번째 단계}
+### 1. {First step}
 
-- [ ] {세부 작업 1}
-- [ ] {세부 작업 2}
+- [ ] {Sub-task 1}
+- [ ] {Sub-task 2}
 
-### 2. {두 번째 단계}
+### 2. {Second step}
 
-- [ ] {세부 작업 3}
-
----
-
-## 완료 조건
-
-1. 모든 Checklist 항목 체크 완료
-2. 빌드 성공 (해당 시)
-3. 테스트 통과 (해당 시)
+- [ ] {Sub-task 3}
 
 ---
 
-## 검증 명령어
+## Completion Criteria
+
+1. All Checklist items checked
+2. Build succeeds (if applicable)
+3. Tests pass (if applicable)
+
+---
+
+## Verification Commands
 
 ```bash
-# 프로젝트 컨텍스트에 맞는 명령어 자동 감지
-# Kotlin/Java: ./gradlew build 또는 ./gradlew ktlintCheck
-# Node.js: npm test 또는 npm run lint
-# Python: pytest 또는 ruff check
+# Auto-detected based on project context
+# Kotlin/Java: ./gradlew build or ./gradlew ktlintCheck
+# Node.js: npm test or npm run lint
+# Python: pytest or ruff check
 ```
 
 ---
 
-## 다음 작업 안내
+## Next Task
 
-검증 통과 후, 다음 작업으로 이동:
+After verification passes, proceed to the next task:
 
-**[Task {다음}: {다음 작업명}](./{다음 파일})**
+**[Task {next}: {next task name}](./{next file})**
 
-다음 작업에서는:
-- {다음 작업 요약}
+In the next task:
+- {Next task summary}
 
 ---
 
-*생성일: {오늘 날짜}*
+*Created: {today's date}*
 ```
 
 ---
 
-## 메인 파일 업데이트
+## Main File Update
 
-메인 계획 파일 상단에 목차 테이블 추가:
+Add a table of contents to the top of the main plan file:
 
 ```markdown
-## 실행 계획 목차 (Implementation Tasks)
+## Implementation Tasks
 
-이 계획서는 {N}개의 세부 작업으로 분리되었습니다.
+This plan has been divided into {N} detailed tasks.
 
-| 순서 | 작업명 | 파일 | 설명 |
-|:----:|--------|------|------|
-| 1 | **{작업1}** | [01-{파일명}.md](./{폴더}/01-{파일명}.md) | {설명} |
-| 2 | **{작업2}** | [02-{파일명}.md](./{폴더}/02-{파일명}.md) | {설명} |
+| Order | Task Name | File | Description |
+|:-----:|-----------|------|-------------|
+| 1 | **{task1}** | [01-{filename}.md](./{folder}/01-{filename}.md) | {description} |
+| 2 | **{task2}** | [02-{filename}.md](./{folder}/02-{filename}.md) | {description} |
 ...
 
-### 작업 규칙
+### Task Rules
 
-1. **순차 실행**: Task 01부터 순서대로 진행
-2. **체크리스트**: 각 작업의 모든 항목을 체크 후 다음으로 이동
-3. **검증 실행**: 각 작업 완료 시 검증 명령어 실행
-4. **링크 이동**: 작업 파일 하단의 "다음 작업" 링크로 이동
+1. **Sequential execution**: Proceed in order starting from Task 01
+2. **Checklist**: Check all items in each task before moving to the next
+3. **Run verification**: Execute verification commands upon completing each task
+4. **Follow links**: Navigate using the "Next Task" link at the bottom of each task file
 
 ---
 ```
 
 ---
 
-## 분리 기준 가이드
+## Subdivision Criteria Guide
 
-### 좋은 분리 예시
+### Good Subdivision Examples
 
-| 프로젝트 유형 | 분리 단위 |
-|--------------|----------|
-| 엔티티 추가 | Domain → Repository → Service → Controller → Test |
-| API 개발 | 엔드포인트별 또는 CRUD 단위 |
-| 리팩토링 | 모듈별 또는 계층별 |
-| 마이그레이션 | 준비 → 실행 → 검증 → 정리 |
-| 기능 추가 | 백엔드 → 프론트엔드 → 통합 테스트 |
+| Project Type | Subdivision Unit |
+|-------------|-----------------|
+| Adding entities | Domain → Repository → Service → Controller → Test |
+| API development | Per endpoint or per CRUD operation |
+| Refactoring | Per module or per layer |
+| Migration | Preparation → Execution → Verification → Cleanup |
+| Adding features | Backend → Frontend → Integration tests |
 
-### 분리하지 말아야 할 경우
+### When NOT to Subdivide
 
-- 5분 이내 완료 가능한 작업
-- 단일 파일 수정
-- 의존성이 너무 강해 분리 불가능한 작업
-
----
-
-## 관련 규칙
-
-- @~/.claude/rules/plan-structure.md - 계획 구조 규칙
+- Tasks completable within 5 minutes
+- Single file modifications
+- Tasks with dependencies too tightly coupled to separate
 
 ---
 
-## 예시
+## Related Rules
 
-### 입력 (원본 계획)
+- @~/.claude/rules/plan-structure.md - Plan structure rules
+
+---
+
+## Example
+
+### Input (Original Plan)
 
 ```markdown
-# User Authentication 구현
+# Implement User Authentication
 
-## 목표
-JWT 기반 인증 시스템 구현
+## Objective
+Implement JWT-based authentication system
 
-## 구현 내용
-1. User 엔티티 생성
-2. UserRepository 생성
-3. AuthService 구현
-4. AuthController API 작성
-5. 테스트 작성
+## Implementation
+1. Create User entity
+2. Create UserRepository
+3. Implement AuthService
+4. Write AuthController API
+5. Write tests
 ```
 
-### 출력 (세분화 결과)
+### Output (Subdivision Result)
 
 ```
 user-authentication/
@@ -347,4 +347,4 @@ user-authentication/
 
 ---
 
-*이 스킬은 Plan 모드 완료 후 계획을 구조화하는 데 사용됩니다.*
+*This skill is used to structure plans after Plan mode is complete.*

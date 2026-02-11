@@ -5,6 +5,15 @@ All notable changes to the Plan Subdivider Plugin will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-02-11
+
+### Changed
+- Localize all core plugin files to English for global consistency
+  - `skills/plan-subdivide/SKILL.md`: Translated frontmatter, step descriptions, AskUserQuestion JSON examples, and templates
+  - `rules/plan-structure.md`: Translated frontmatter, section headers, tables, and template placeholders
+  - `rules/rule-format.md`: Translated frontmatter, section headers, tables, and code examples
+  - `scripts/install-rules.sh`: Translated comments
+
 ## [1.0.0] - 2026-02-09
 
 ### Added

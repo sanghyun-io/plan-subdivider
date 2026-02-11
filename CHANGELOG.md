@@ -5,6 +5,16 @@ All notable changes to the Plan Subdivider Plugin will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Planned Features
+- Task status tracking integration
+- Plan templates library
+- Interactive task progress visualization
+- Git integration for task commits
+- Estimated time tracking per task
+- Dependency graph visualization
+
 ## [1.1.0] - 2026-02-11
 
 ### Changed
@@ -47,16 +57,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automated rule file installation script
 - Support for custom installation modes (global/project)
 - Skip existing files during installation
-
-## [Unreleased]
-
-### Planned Features
-- Task status tracking integration
-- Plan templates library
-- Interactive task progress visualization
-- Git integration for task commits
-- Estimated time tracking per task
-- Dependency graph visualization
 
 ---
 

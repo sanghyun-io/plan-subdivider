@@ -85,7 +85,7 @@ That's it! The plugin auto-installs rules to `.claude/rules/` on first run.
 /plan Implement user authentication with JWT
 ```
 
-Claude (via Prometheus agent) interviews you and creates a structured plan.
+Claude interviews you and creates a structured plan.
 
 ### 3. Subdivide
 
@@ -194,7 +194,7 @@ Create User entity with JPA annotations for database persistence.
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
-│  Claude (Prometheus): Creates structured plan              │
+│  Claude: Creates structured plan                           │
 │  - Requirements gathering                                   │
 │  - Architecture design                                      │
 │  - Implementation steps                                     │
@@ -313,9 +313,6 @@ To use Plan Subdivider smoothly, add these permissions to your `~/.claude/settin
 
 ### Works With
 
-- **Prometheus**: Creates structured plans via `/plan`
-- **Momus**: Reviews plans with `/review`
-- **Sisyphus**: Multi-agent task orchestration
 - **Claude Plan Mode**: Native plan creation workflow
 
 ### Pre-work Workflow

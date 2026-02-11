@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - Comprehensive README with installation and usage guide
 - Troubleshooting section
-- Integration guide for Sisyphus system
+- Integration guide
 - Example file structures
 
 ### Installation
@@ -73,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### v1.0.0 - Initial Release
 
-This is the first stable release of the Plan Subdivider Plugin. It provides a complete workflow for structured planning in Claude Code, from plan creation with Prometheus to automatic subdivision and sequential task execution.
+This is the first stable release of the Plan Subdivider Plugin. It provides a complete workflow for structured planning in Claude Code, from plan creation to automatic subdivision and sequential task execution.
 
 **Breaking Changes**: None (initial release)
 
@@ -84,8 +84,7 @@ This is the first stable release of the Plan Subdivider Plugin. It provides a co
 
 **Compatibility**:
 - Claude Code: v0.1.0+
-- Works with Sisyphus Multi-Agent System
-- Compatible with Prometheus, Momus agents
+- Works with Claude Code Plan Mode
 
 ---
 

@@ -54,7 +54,7 @@ Rules for structuring plans.
     "options": [
       {"label": "Skip and start now", "description": "Begin implementation without Pre-work"},
       {"label": "Run /subdivide", "description": "Subdivide the plan into detailed task files"},
-      {"label": "Run /review", "description": "Review the plan with Momus"}
+      {"label": "Run /review", "description": "Review the plan"}
     ]
   }]
 }
@@ -109,8 +109,8 @@ Subdivision plan approval in `/subdivide` skill:
 | Skill | Trigger Condition | Execution Mode | Description |
 |-------|-------------------|:--------------:|-------------|
 | `/subdivide` | Task ≥ 3 AND Plan execution starting (Pre-work) | confirm | Subdivide plan into detailed task files |
-| `/review` | Multi-file changes AND Plan execution starting (Pre-work) | confirm | Review plan with Momus |
-| `/plan` | When a new plan is needed | auto | Create plan with Prometheus |
+| `/review` | Multi-file changes AND Plan execution starting (Pre-work) | confirm | Review plan |
+| `/plan` | When a new plan is needed | auto | Create plan |
 
 **Execution mode descriptions**:
 - `auto`: Execute automatically when conditions are met
@@ -131,7 +131,7 @@ Subdivision plan approval in `/subdivide` skill:
 ## When This Applies
 
 - When writing plans in Plan mode
-- When running `/plan`, `/prometheus`
+- When running `/plan`
 - When creating complex work plans
 
 ---
@@ -318,5 +318,5 @@ If a checklist item needs a code example, include it with indentation:
 
 ---
 
-*This rule is automatically referenced by Plan mode, Prometheus, and other plan-writing agents.*
+*This rule is automatically referenced by Plan mode and other plan-writing agents.*
 *Last modified: 2026-02-05*

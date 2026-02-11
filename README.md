@@ -2,7 +2,7 @@
 
 > **Transform complex plans into structured, actionable tasks** — automatically
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/sanghyun-io/plan-subdivider)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/sanghyun-io/plan-subdivider)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/sanghyun-io/plan-subdivider?style=social)](https://github.com/sanghyun-io/plan-subdivider/stargazers)
 

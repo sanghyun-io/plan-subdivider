@@ -193,6 +193,62 @@ Then **you must use the AskUserQuestion tool**:
 - Do NOT just give instructions like "Start working on the task" as plain text
 - You MUST use the AskUserQuestion tool to provide choices
 
+### Step 7: Work Environment Setup (conditional)
+
+> **Trigger**: Only when user selects **"Start first task"** in Step 6.
+> Skip this step if user selects "Review entire plan" or "Later".
+
+Before starting implementation, ask the user about the work environment **using AskUserQuestion**:
+
+```json
+{
+  "questions": [{
+    "question": "Where should the work be performed?",
+    "header": "Environment",
+    "multiSelect": false,
+    "options": [
+      {
+        "label": "Current environment",
+        "description": "Work on the current branch in the current directory as-is"
+      },
+      {
+        "label": "New branch",
+        "description": "Create a new branch (git switch -c) in the current directory"
+      },
+      {
+        "label": "Git worktree",
+        "description": "Create a separate working directory with a new branch (git worktree add)"
+      }
+    ]
+  }]
+}
+```
+
+#### Behavior per selection
+
+**Current environment**:
+1. Proceed directly — open Task 01 and begin implementation
+
+**New branch**:
+1. Derive branch name from the plan name (e.g., `feature/{plan-name}`)
+2. Run `git switch -c {branch-name}`
+3. If branch creation fails, report to user and wait for instructions
+4. On success, open Task 01 and begin implementation
+
+**Git worktree**:
+1. Derive branch name from the plan name (e.g., `feature/{plan-name}`)
+2. Determine worktree path: `../{repo-name}-{plan-name}` (sibling of current repo)
+3. Run `git worktree add {worktree-path} -b {branch-name}`
+4. If worktree creation fails, report to user and wait for instructions
+5. On success, inform the user of the new working directory path
+6. Open Task 01 and begin implementation in the new worktree
+
+**⚠️ Important**:
+- Do NOT skip this step when "Start first task" is selected
+- Do NOT assume the user wants the current environment by default
+- You MUST use the AskUserQuestion tool (not plain text)
+- If any git command fails, STOP and report — do not retry autonomously
+
 ---
 
 ## Task File Template

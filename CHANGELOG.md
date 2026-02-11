@@ -11,9 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Task status tracking integration
 - Plan templates library
 - Interactive task progress visualization
-- Git integration for task commits
 - Estimated time tracking per task
 - Dependency graph visualization
+
+## [1.2.0] - 2026-02-11
+
+### Added
+- **Work Environment Setup (Step 7)**: New pre-implementation step that asks where to perform the work
+  - Current environment: Work on the current branch as-is
+  - New branch: Create a feature branch via `git switch -c`
+  - Git worktree: Create a separate working directory with `git worktree add`
+  - Triggered only when user selects "Start first task" in Step 6
 
 ## [1.1.0] - 2026-02-11
 

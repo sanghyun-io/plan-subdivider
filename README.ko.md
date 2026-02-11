@@ -2,7 +2,7 @@
 
 > **복잡한 계획을 구조화된 실행 가능한 작업으로 자동 변환**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/sanghyun-io/plan-subdivider)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/sanghyun-io/plan-subdivider)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/sanghyun-io/plan-subdivider?style=social)](https://github.com/sanghyun-io/plan-subdivider/stargazers)
 

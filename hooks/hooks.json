@@ -1,22 +1,23 @@
 {
   "hooks": {
-    "PostPluginInstall": [
+    "SessionStart": [
       {
+        "matcher": "startup",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-rules.sh",
-            "description": "Install plan structure rule files to .claude/rules/"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/install-rules.sh\"",
+            "timeout": 30,
+            "statusMessage": "Installing plan structure rules..."
           }
         ]
-      }
-    ],
-    "SessionStart": [
+      },
       {
+        "matcher": "startup|resume",
         "hooks": [
           {
-            "type": "log",
-            "message": "Plan Structure Plugin active. Use /subdivide to organize complex plans."
+            "type": "command",
+            "command": "echo \"Plan Structure Plugin active. Use /subdivide to organize complex plans.\""
           }
         ]
       }

@@ -6,11 +6,6 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}  Plan Structure Plugin - Rules Installation${NC}"
-echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo ""
-
 # Plugin's rules directory
 PLUGIN_RULES="${CLAUDE_PLUGIN_ROOT}/rules"
 
@@ -25,14 +20,35 @@ INSTALL_MODE="${CLAUDE_PLUGIN_INSTALL_MODE:-project}"
 
 if [ "$INSTALL_MODE" = "global" ]; then
   TARGET_DIR="$GLOBAL_RULES"
-  echo -e "📦 Installing rules to: ${GREEN}~/.claude/rules${NC} (global)"
 else
   TARGET_DIR="$PROJECT_RULES"
-  echo -e "📦 Installing rules to: ${GREEN}.claude/rules${NC} (project)"
+fi
+
+# Quick check: skip if all rules already exist
+ALL_INSTALLED=true
+for rule_file in "$PLUGIN_RULES"/*.md; do
+  [ -f "$rule_file" ] || continue
+  filename=$(basename "$rule_file")
+  [ -f "$TARGET_DIR/$filename" ] || { ALL_INSTALLED=false; break; }
+done
+
+if [ "$ALL_INSTALLED" = true ]; then
+  exit 0
 fi
 
 # Create target directory
 mkdir -p "$TARGET_DIR"
+
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BLUE}  Plan Structure Plugin - Rules Installation${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+if [ "$INSTALL_MODE" = "global" ]; then
+  echo -e "📦 Installing rules to: ${GREEN}~/.claude/rules${NC} (global)"
+else
+  echo -e "📦 Installing rules to: ${GREEN}.claude/rules${NC} (project)"
+fi
 
 # Copy rule files
 INSTALLED_COUNT=0

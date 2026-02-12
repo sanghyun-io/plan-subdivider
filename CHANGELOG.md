@@ -7,11 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- Fix hooks.json using invalid hook event `PostPluginInstall` and invalid hook type `log` causing plugin load failure ([#3](https://github.com/sanghyun-io/plan-subdivider/issues/3))
-  - Replace `PostPluginInstall` with `SessionStart` (matcher: `startup`) for rule installation
-  - Replace `type: "log"` with `type: "command"` using `echo` for plugin activation message
-
 ### Planned Features
 - Task status tracking integration
 - Plan templates library
@@ -19,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Git integration for task commits
 - Estimated time tracking per task
 - Dependency graph visualization
+
+## [1.2.1] - 2026-02-12
+
+### Fixed
+- Fix hooks.json using invalid hook event `PostPluginInstall` and invalid hook type `log` causing plugin load failure ([#3](https://github.com/sanghyun-io/plan-subdivider/issues/3))
+  - Replace `PostPluginInstall` with `SessionStart` (matcher: `startup`) for rule installation
+  - Replace `type: "log"` with `type: "command"` using `echo` for plugin activation message
+  - Add early-exit to install-rules.sh to prevent context pollution on repeat sessions
+  - Restrict activation message to `startup|resume` events only
 
 ## [1.2.0] - 2026-02-11
 
